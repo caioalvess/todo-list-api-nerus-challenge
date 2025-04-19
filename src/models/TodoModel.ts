@@ -1,2 +1,2 @@
-// apenas referência de que o model está em prisma/schema.prisma
-// e acessado por `import { PrismaClient } from '@prisma/client'`
+// just a reference that the model is in prisma/schema.prisma
+// and accessed via `import { PrismaClient } from '@prisma/client'`
