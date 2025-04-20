@@ -1,0 +1,29 @@
+services:
+  todo-db:
+    image: postgres:15
+    container_name: todo-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: todo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  todo-api:
+    build: .
+    container_name: todo-api
+    depends_on:
+      - todo-db
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@todo-db:5432/todo
+    volumes:
+      - .:/app
+    command: sh -c "npx prisma generate && npx prisma migrate deploy && npm run start"
+
+volumes:
+  pgdata:
