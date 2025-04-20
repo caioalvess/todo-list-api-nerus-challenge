@@ -5,8 +5,14 @@ export const getTodos = () => {
   return todoRepo.getTodosFromDb();
 };
 
-export const getTodoById = (id: number) => {
-  return todoRepo.getTodoByIdFromDb(id);
+export const getTodoById = async (id: number) => {
+  const todo = await todoRepo.getTodoByIdFromDb(id);
+  if (!todo) {
+    const error = new Error("Task not found in the database.");
+    error.name = "NotFoundError";
+    throw error;
+  }
+  return todo;
 };
 
 export const createTodo = (data: CreateTodoInput) => {
