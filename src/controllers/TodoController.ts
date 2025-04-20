@@ -45,8 +45,12 @@ export const createTodoController = async (
       return;
     }
 
-    const { title, description } = result.data;
-    const newTodo = await todoService.createTodo({ title, description });
+    const { title, description, completed } = result.data;
+    const newTodo = await todoService.createTodo({
+      title,
+      description,
+      completed,
+    });
     res.status(201).json(newTodo);
   } catch (error) {
     next(error);

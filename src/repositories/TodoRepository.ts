@@ -13,13 +13,14 @@ export const getTodoByIdFromDb = async (id: number) => {
 export const createTodoInDb = async (data: {
   title: string;
   description: string;
+  completed?: boolean;
 }) => {
   return await prisma.todo.create({ data });
 };
 
 export const updateTodoInDb = async (
   id: number,
-  data: { title: string; description: string }
+  data: { title: string; description: string; completed?: boolean }
 ) => {
   return await prisma.todo.update({
     where: { id },
