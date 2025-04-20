@@ -27,6 +27,7 @@ export const updateTodo = (id: number, data: UpdateTodoInput) => {
     ...data,
     title: data.title || "",
     description: data.description || "",
+    completed: data.completed || false,
   });
 };
 

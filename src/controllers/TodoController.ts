@@ -71,8 +71,12 @@ export const updateTodoController = async (
       return;
     }
 
-    const { title, description } = result.data;
-    const updated = await todoService.updateTodo(id, { title, description });
+    const { title, description, completed } = result.data;
+    const updated = await todoService.updateTodo(id, {
+      title,
+      description,
+      completed,
+    });
 
     res.json(updated);
   } catch (error) {
