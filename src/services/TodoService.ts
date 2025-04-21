@@ -1,10 +1,37 @@
 import * as todoRepo from "../repositories/TodoRepository";
 import { CreateTodoInput, UpdateTodoInput } from "../types/TodoTypes";
 
-export const getTodos = () => {
-  return todoRepo.getTodosFromDb();
-};
+export const getTodos = async (
+  page: number,
+  limit: number,
+  filters?: { [key: string]: string | number | boolean }
+) => {
+  const offset = (page - 1) * limit;
 
+  const todos = await todoRepo.getTodosFromDb(filters, limit, offset);
+
+  const total = await todoRepo.countTodos(filters);
+  const totalCompleted = await todoRepo.countTodos({
+    ...filters,
+    completed: true,
+  });
+  const totalPending = await todoRepo.countTodos({
+    ...filters,
+    completed: false,
+  });
+
+  const totalPages = Math.ceil(total / limit);
+
+  return {
+    data: todos,
+    totalCompleted,
+    totalPending,
+    total,
+    page,
+    limit,
+    totalPages,
+  };
+};
 export const getTodoById = async (id: number) => {
   const todo = await todoRepo.getTodoByIdFromDb(id);
   if (!todo) {

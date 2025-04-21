@@ -11,8 +11,26 @@ export const getTodosController = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const todos = await todoService.getTodos();
-    res.json(todos);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const filters = Object.fromEntries(
+      Object.entries(req.query).map(([key, value]) => {
+        if (key === "completed") {
+          return [key, value === "true"];
+        }
+        return [key, value];
+      })
+    );
+    delete filters.page;
+    delete filters.limit;
+
+    const todosResponse = await todoService.getTodos(
+      page,
+      limit,
+      filters as { [key: string]: string | number | boolean }
+    );
+
+    res.json(todosResponse);
   } catch (error) {
     next(error);
   }

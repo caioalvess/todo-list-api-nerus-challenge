@@ -2,8 +2,33 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const getTodosFromDb = async () => {
-  return await prisma.todo.findMany();
+export const getTodosFromDb = async (
+  filters: { [key: string]: string | number | boolean },
+  limit: number,
+  offset: number
+) => {
+  const where: any = { ...filters };
+
+  if (typeof filters.title === "string") {
+    where.title = { contains: filters.title, mode: "insensitive" };
+  }
+
+  if (typeof filters.description === "string") {
+    where.description = { contains: filters.description, mode: "insensitive" };
+  }
+
+  if (typeof filters.completed === "boolean") {
+    where.completed = filters.completed;
+  }
+
+  return prisma.todo.findMany({
+    where,
+    skip: offset,
+    take: limit,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 };
 
 export const getTodoByIdFromDb = async (id: number) => {
@@ -30,4 +55,12 @@ export const updateTodoInDb = async (
 
 export const deleteTodoFromDb = async (id: number) => {
   return await prisma.todo.delete({ where: { id } });
+};
+
+export const countTodos = async (filters: {
+  [key: string]: string | number | boolean;
+}) => {
+  return prisma.todo.count({
+    where: filters,
+  });
 };
