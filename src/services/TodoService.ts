@@ -4,7 +4,7 @@ import { CreateTodoInput, UpdateTodoInput } from "../types/TodoTypes";
 export const getTodos = async (
   page: number,
   limit: number,
-  filters?: { [key: string]: string | number | boolean }
+  filters: { [key: string]: string | number | boolean }
 ) => {
   const offset = (page - 1) * limit;
 
@@ -32,6 +32,7 @@ export const getTodos = async (
     totalPages,
   };
 };
+
 export const getTodoById = async (id: number) => {
   const todo = await todoRepo.getTodoByIdFromDb(id);
   if (!todo) {
