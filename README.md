@@ -6,6 +6,12 @@ A aplicação é containerizada com **Docker** e **Docker Compose** para facilit
 
 ---
 
+## ✅ Requisitos
+
+Antes de começar, certifique-se de que você possui o seguinte instalado na sua máquina:
+
+- **Docker**: [Instale o Docker](https://www.docker.com/get-started) para gerenciar contêineres.
+
 ## 🐳 Como rodar com Docker e Docker Compose
 
 Siga os passos abaixo para rodar a aplicação dentro de contêineres Docker:
