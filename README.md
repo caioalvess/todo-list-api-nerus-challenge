@@ -29,5 +29,5 @@ Isso irá construir a imagem do Docker para o backend e iniciar os contêineres 
 
 A aplicação ficará disponível em:
 
-- Backend API: `http://localhost:3001`
-- Swagger UI (documentação da API): `http://localhost:3001/api-docs`
+- Backend API: [http://localhost:3001](http://localhost:3001)
+- Swagger UI (documentação da API): [http://localhost:3001/api-docs](http://localhost:3001/api-docs)
