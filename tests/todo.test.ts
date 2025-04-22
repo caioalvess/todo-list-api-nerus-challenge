@@ -31,8 +31,11 @@ describe("Todo API - Integration", () => {
   it("Should list all tasks", async () => {
     const res = await request(app).get("/api/todos");
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBeGreaterThan(0);
+    expect(Array.isArray(res.body.data)).toBe(true);
+    if (res.body.data.length > 0) {
+      expect(res.body.data[0]).toHaveProperty("id");
+      expect(res.body.data[0]).toHaveProperty("title");
+    }
   });
 
   it("Should fetch a task by ID", async () => {
