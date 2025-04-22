@@ -13,8 +13,8 @@ Siga os passos abaixo para rodar a aplicação dentro de contêineres Docker:
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/todo-backend.git
-cd todo-backend
+git clone https://github.com/caioalvess/todo-list-nerus-challenge-api.git
+cd todo-list-nerus-challenge-api
 ```
 
 ### 1. Construir e rodar os contêineres
