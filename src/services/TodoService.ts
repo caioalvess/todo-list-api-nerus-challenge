@@ -1,21 +1,20 @@
 import * as todoRepo from "../repositories/TodoRepository";
-import { CreateTodoInput, UpdateTodoInput } from "../types/TodoTypes";
 
 export const getTodos = async (
+  userId: number,
   page: number,
   limit: number,
   filters: { [key: string]: string | number | boolean }
 ) => {
   const offset = (page - 1) * limit;
 
-  const todos = await todoRepo.getTodosFromDb(filters, limit, offset);
-
-  const total = await todoRepo.countTodos(filters);
-  const totalCompleted = await todoRepo.countTodos({
+  const todos = await todoRepo.getTodosFromDb(userId, filters, limit, offset);
+  const total = await todoRepo.countTodos(userId, filters);
+  const totalCompleted = await todoRepo.countTodos(userId, {
     ...filters,
     completed: true,
   });
-  const totalPending = await todoRepo.countTodos({
+  const totalPending = await todoRepo.countTodos(userId, {
     ...filters,
     completed: false,
   });
@@ -33,32 +32,21 @@ export const getTodos = async (
   };
 };
 
-export const getTodoById = async (id: number) => {
-  const todo = await todoRepo.getTodoByIdFromDb(id);
-  if (!todo) {
-    const error = new Error("Task not found in the database.");
-    error.name = "NotFoundError";
-    throw error;
-  }
-  return todo;
+export const createTodo = async (
+  userId: number,
+  data: { title: string; description: string; completed?: boolean }
+) => {
+  return todoRepo.createTodoInDb(userId, data);
 };
 
-export const createTodo = (data: CreateTodoInput) => {
-  return todoRepo.createTodoInDb({
-    ...data,
-    description: data.description || "",
-  });
+export const updateTodo = async (
+  userId: number,
+  id: number,
+  data: { title: string; description: string; completed?: boolean }
+) => {
+  return todoRepo.updateTodoInDb(userId, id, data);
 };
 
-export const updateTodo = (id: number, data: UpdateTodoInput) => {
-  return todoRepo.updateTodoInDb(id, {
-    ...data,
-    title: data.title || "",
-    description: data.description || "",
-    completed: data.completed || false,
-  });
-};
-
-export const deleteTodo = (id: number) => {
-  return todoRepo.deleteTodoFromDb(id);
+export const deleteTodo = async (userId: number, id: number) => {
+  return todoRepo.deleteTodoFromDb(userId, id);
 };

@@ -1,5 +1,6 @@
 import express from "express";
 import { todoRoutes } from "./routes/TodoRoutes";
+import { authRoutes } from "./routes/AuthRoutes";
 import { errorHandler } from "./middlewares/ErrorHandler";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./swagger";
@@ -11,8 +12,7 @@ app.use(cors());
 
 app.use(express.json());
 
-app.use(express.json());
-
+app.use("/api/auth", authRoutes);
 app.use("/api", todoRoutes);
 
 app.use(errorHandler);

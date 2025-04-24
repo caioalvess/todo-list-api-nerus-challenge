@@ -3,11 +3,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getTodosFromDb = async (
+  userId: number,
   filters: { [key: string]: string | number | boolean },
   limit: number,
   offset: number
 ) => {
-  const where: any = { ...filters };
+  const where: any = { ...filters, userId };
 
   if (typeof filters.title === "string") {
     where.title = { contains: filters.title, mode: "insensitive" };
@@ -31,50 +32,51 @@ export const getTodosFromDb = async (
   });
 };
 
-export const getTodoByIdFromDb = async (id: number) => {
-  return await prisma.todo.findUnique({ where: { id } });
-};
-
-export const createTodoInDb = async (data: {
-  title: string;
-  description: string;
-  completed?: boolean;
-}) => {
-  return await prisma.todo.create({ data });
-};
-
-export const updateTodoInDb = async (
-  id: number,
-  data: { title: string; description: string; completed?: boolean }
+export const countTodos = async (
+  userId: number,
+  filters: { [key: string]: string | number | boolean }
 ) => {
-  return await prisma.todo.update({
-    where: { id },
-    data,
-  });
-};
-
-export const deleteTodoFromDb = async (id: number) => {
-  return await prisma.todo.delete({ where: { id } });
-};
-
-export const countTodos = async (filters: {
-  [key: string]: string | number | boolean;
-}) => {
-  const where: any = { ...filters };
+  const where: any = { ...filters, userId };
 
   if (typeof filters.title === "string") {
-    where.title = { contains: filters.title, mode: "insensitive" }; // Busca parcial
+    where.title = { contains: filters.title, mode: "insensitive" };
   }
 
   if (typeof filters.description === "string") {
-    where.description = { contains: filters.description, mode: "insensitive" }; // Busca parcial
+    where.description = { contains: filters.description, mode: "insensitive" };
   }
 
   if (typeof filters.completed === "boolean") {
-    where.completed = filters.completed; // Filtro exato
+    where.completed = filters.completed;
   }
 
   return prisma.todo.count({
     where,
+  });
+};
+
+export const createTodoInDb = async (
+  userId: number,
+  data: { title: string; description: string; completed?: boolean }
+) => {
+  return prisma.todo.create({
+    data: { ...data, userId },
+  });
+};
+
+export const updateTodoInDb = async (
+  userId: number,
+  id: number,
+  data: { title: string; description: string; completed?: boolean }
+) => {
+  return prisma.todo.updateMany({
+    where: { id, userId },
+    data,
+  });
+};
+
+export const deleteTodoFromDb = async (userId: number, id: number) => {
+  return prisma.todo.deleteMany({
+    where: { id, userId },
   });
 };
