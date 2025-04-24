@@ -32,6 +32,16 @@ export const getTodos = async (
   };
 };
 
+export const getTodoById = async (userId: number, id: number) => {
+  const todo = await todoRepo.getTodoByIdFromDb(userId, id);
+  if (!todo) {
+    const error = new Error("Task not found in the database.");
+    error.name = "NotFoundError";
+    throw error;
+  }
+  return todo;
+};
+
 export const createTodo = async (
   userId: number,
   data: { title: string; description: string; completed?: boolean }
@@ -44,9 +54,21 @@ export const updateTodo = async (
   id: number,
   data: { title: string; description: string; completed?: boolean }
 ) => {
-  return todoRepo.updateTodoInDb(userId, id, data);
+  const updatedTodo = await todoRepo.updateTodoInDb(userId, id, data);
+  if (!updatedTodo) {
+    const error = new Error("Task not found in the database.");
+    error.name = "NotFoundError";
+    throw error;
+  }
+  return updatedTodo;
 };
 
 export const deleteTodo = async (userId: number, id: number) => {
-  return todoRepo.deleteTodoFromDb(userId, id);
+  const deleted = await todoRepo.deleteTodoFromDb(userId, id);
+  if (!deleted) {
+    const error = new Error("Task not found in the database.");
+    error.name = "NotFoundError";
+    throw error;
+  }
+  return deleted;
 };
