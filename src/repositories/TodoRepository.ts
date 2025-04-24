@@ -57,7 +57,9 @@ export const deleteTodoFromDb = async (id: number) => {
   return await prisma.todo.delete({ where: { id } });
 };
 
-export const countTodos = async (filters: { [key: string]: string | number | boolean }) => {
+export const countTodos = async (filters: {
+  [key: string]: string | number | boolean;
+}) => {
   const where: any = { ...filters };
 
   if (typeof filters.title === "string") {
